@@ -1,0 +1,19 @@
+*, *:after, *:before{
+    box-sizing: border-box;
+}
+.contenedor{
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+img{
+    max-width: 100%;
+}
+footer{
+    background-color: rgb(13, 13, 19);
+    height: 50px;
+    margin-top: 20px;
+}
