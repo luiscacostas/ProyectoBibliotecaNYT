@@ -1,6 +1,12 @@
 const seccion = document.querySelector('main section');
 const fragment = document.createDocumentFragment();
 const header = document.querySelector('header')
+const spinn = document.querySelector('#contenedor_spinner')
+
+window.onload = ()=>{
+    spinn.style.visibility = 'hidden'
+    spinn.style.opacity = '0'
+}
 
 seccion.addEventListener('click', (ev)=>{
     if (ev.target.tagName === 'BUTTON') {
@@ -9,6 +15,7 @@ seccion.addEventListener('click', (ev)=>{
     }
 })
 
+
 const llamadaListas = async() => {
     try {
         const respuesta = await fetch('https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=qHjUDXnBShnno4hnrWYz0VW7jLmZ503q')
@@ -16,6 +23,7 @@ const llamadaListas = async() => {
             const data = await respuesta.json()
             const listas = data.results
             paintFirstPage(listas)
+            return listas
         } else {
             throw error
         }
@@ -59,6 +67,7 @@ const llamadaBestSellers = async(valorClick) => {
             const data = await respuesta.json()
             const listBooks = data.results.books 
             paintSecondPage(listBooks)
+            return listBooks
         } else {
             throw error
         }
@@ -100,7 +109,6 @@ const paintSecondPage = (listBooks)=>{
         seccion.append(divLibros)  
     })
 }
-
 
 llamadaListas(); 
 

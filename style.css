@@ -133,3 +133,35 @@ a{
         display: block;
     }
 }
+#contenedor_spinner{
+    background-color: rgba(250, 240, 245, 0.9);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    transition: all 1s ease;
+    z-index: 10000;
+}
+#spinner{ 
+    border: 15px solid #ccc;
+    border-top: #f4266a;
+    border-top-style: groove ;
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    
+    position: absolute;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    margin: auto;
+    animation: spin 1.5s linear infinite;
+}
+@keyframes spin{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
