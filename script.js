@@ -1,7 +1,11 @@
 const seccion = document.querySelector('main section');
 const fragment = document.createDocumentFragment();
-const header = document.querySelector('header')
-const spinn = document.querySelector('#contenedor_spinner')
+const header = document.querySelector('header');
+const headerDiv = document.querySelector('header div')
+const spinn = document.querySelector('#contenedor_spinner');
+const filterInput = document.querySelector('#filterInput');
+const filterButton = document.querySelector('#filterButton');
+let listasGlobal = [];
 
 window.onload = ()=>{
     spinn.style.visibility = 'hidden'
@@ -14,16 +18,22 @@ seccion.addEventListener('click', (ev)=>{
         llamadaBestSellers(valorClick)
     }
 })
-
+filterButton.addEventListener('click', () => {
+    const filterValue = filterInput.value.toLowerCase();
+    const filteredListas = listasGlobal.filter(lista => 
+        lista.list_name.toLowerCase().includes(filterValue)
+    );
+    paintFirstPage(filteredListas);
+});
 
 const llamadaListas = async() => {
     try {
         const respuesta = await fetch('https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=qHjUDXnBShnno4hnrWYz0VW7jLmZ503q')
         if (respuesta.ok) {
             const data = await respuesta.json()
-            const listas = data.results
-            paintFirstPage(listas)
-            return listas
+            listasGlobal = data.results;
+            paintFirstPage(listasGlobal)
+            return listasGlobal
         } else {
             throw error
         }
@@ -65,8 +75,9 @@ const llamadaBestSellers = async(valorClick) => {
         const respuesta = await fetch(`https://api.nytimes.com/svc/books/v3/lists/current/${valorClick}.json?api-key=qHjUDXnBShnno4hnrWYz0VW7jLmZ503q`)
         if (respuesta.ok) {
             const data = await respuesta.json()
+            const nombreListas = data.results
             const listBooks = data.results.books 
-            paintSecondPage(listBooks)
+            paintSecondPage(listBooks, nombreListas)
             return listBooks
         } else {
             throw error
@@ -76,15 +87,18 @@ const llamadaBestSellers = async(valorClick) => {
     }
 }
 
-const paintSecondPage = (listBooks)=>{
+const paintSecondPage = (listBooks, nombreListas)=>{
     seccion.innerHTML = '';
+    headerDiv.innerHTML = '';
+    const headingLista = document.createElement('H2')
     const enlaceGoBack = document.createElement('A')
     const buttonGoBack = document.createElement('BUTTON')
+    headingLista.textContent = nombreListas.list_name
     buttonGoBack.innerHTML = `<span><</span> Back To Index`
     buttonGoBack.classList.add('buttonGoBack')
     enlaceGoBack.setAttribute('href', 'index.html')
     enlaceGoBack.append(buttonGoBack)
-    header.append(enlaceGoBack)
+    header.append(headingLista, enlaceGoBack)
     
     listBooks.forEach((book, i) => {
       

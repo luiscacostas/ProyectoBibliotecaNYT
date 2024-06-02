@@ -14,8 +14,13 @@ img{
 }
 footer{
     background-color: rgb(13, 13, 19);
-    height: 50px;
+    height: 100px;
     margin-top: 20px;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    text-align: center;
+    color: white;
+    padding: 20px;
+    font-size: 20px;
 }
 li{
     list-style: none;
@@ -165,3 +170,23 @@ a{
         transform: rotate(360deg);
     }
 }
+#filterButton{
+    background-color: rgb(169, 157, 167);
+    cursor: pointer;
+    color: white;
+    padding: 10px 20px;
+}
+#filterInput{
+    padding: 10px 20px;
+    font-size: 15px;
+}
+header div{
+    margin-top: 20px;
+    text-align: center;
+}
+@media (min-width: 468px) {
+    header div{
+        text-align: right;
+    }
+}
+
