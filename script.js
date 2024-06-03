@@ -14,8 +14,8 @@ window.onload = ()=>{
 
 seccion.addEventListener('click', (ev)=>{
     if (ev.target.tagName === 'BUTTON') {
-        const valorClick = ev.target.value;
-        llamadaBestSellers(valorClick)
+        const category = ev.target.value;
+        llamadaBestSellers(category)
     }
 })
 filterButton.addEventListener('click', () => {
@@ -70,9 +70,9 @@ const paintFirstPage = (listas)=>{
     seccion.append(fragment)
 }
 
-const llamadaBestSellers = async(valorClick) => {
+const llamadaBestSellers = async(category) => {
     try {
-        const respuesta = await fetch(`https://api.nytimes.com/svc/books/v3/lists/current/${valorClick}.json?api-key=qHjUDXnBShnno4hnrWYz0VW7jLmZ503q`)
+        const respuesta = await fetch(`https://api.nytimes.com/svc/books/v3/lists/current/${category}.json?api-key=qHjUDXnBShnno4hnrWYz0VW7jLmZ503q`)
         if (respuesta.ok) {
             const data = await respuesta.json()
             const nombreListas = data.results

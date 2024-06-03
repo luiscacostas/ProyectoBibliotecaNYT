@@ -146,10 +146,12 @@ a{
     transition: all 1s ease;
     z-index: 10000;
 }
+/*Creacion de Spinner*/
+
 #spinner{ 
     border: 15px solid #ccc;
     border-top: #f4266a;
-    border-top-style: groove ;
+    border-top-style:groove;
     width: 100px;
     height: 100px;
     border-radius: 100px;
