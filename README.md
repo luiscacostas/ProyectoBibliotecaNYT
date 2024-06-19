@@ -1,107 +1,190 @@
-README
-Descripción del Proyecto
-Este proyecto es una aplicación web que se integra con la API de Best Sellers del New York Times y Firebase para proporcionar una interfaz fácil de usar para explorar, filtrar y organizar listas de libros y best sellers. Los usuarios pueden registrarse, iniciar sesión, ver listas de libros, filtrarlas por varios criterios, marcar libros como favoritos y cargar imágenes de perfil.
+### README para el Proyecto de Libros BestSeller del New York Times
+##### Descripción del Proyecto
+Este proyecto es una aplicación web interactiva que permite a los usuarios explorar las listas de libros BestSeller del New York Times. Los usuarios pueden registrarse, iniciar sesión, filtrar y ordenar las listas de libros, y añadir libros a su lista de favoritos. 
 
-Características
-Listas de Best Sellers del NYT:
+La aplicación está construida utilizando HTML, CSS, JavaScript y Firebase para la autenticación, el almacenamiento de datos y el almacenamiento de archivos.
 
-Obtener y mostrar varias listas de libros de la API del NYT.
-Filtrar y ordenar listas por nombre, fecha de publicación y frecuencia de actualización.
-Detalles del Libro:
+###  Requisitos Previos
+Para ejecutar este proyecto, necesitarás:
 
-Ver información detallada sobre los libros en las listas seleccionadas.
-Filtrar y ordenar libros por título y autor.
-Autenticación de Usuarios:
+- Un navegador web moderno (Chrome, Firefox, Safari, etc.)
+- Conexión a Internet
+- Una cuenta en Firebase para configurar tu propia base de datos y almacenamiento
+- Configuración de Firebase
+- Crear un Proyecto en Firebase
 
-Registro e inicio de sesión utilizando Firebase Authentication.
-Mantener sesiones de usuario y permitir a los usuarios cerrar sesión.
-Favoritos:
 
-Marcar libros como favoritos.
-Ver y gestionar una lista de libros favoritos almacenados en Firebase Firestore.
-Gestión de Perfil:
+------------
 
-Cargar y mostrar imágenes de perfil utilizando Firebase Storage.
-Empezando
-Requisitos Previos
-Asegúrese de tener un navegador web moderno.
-Necesita un proyecto de Firebase con Firestore, Authentication y Storage habilitados.
-Obtener claves API para NYT y Firebase.
-Configuración
-Clonar el repositorio:
+1. Ve a Firebase Console y crea un nuevo proyecto.
+1. Añade una nueva aplicación web al proyecto y copia la configuración de Firebase (firebaseConfig).
+1. Configurar Firestore.
+1. Habilita Firestore en modo de prueba para simplificar la configuración inicial.
+1. Configurar Autenticación.
+1. Habilita el proveedor de autenticación por correo electrónico/contraseña.
+Configurar Almacenamiento.
+1. Habilita Firebase Storage.
+1. Configuración del Proyecto
+1. Clona el repositorio.
 
-bash
-Copiar código
-git clone https://github.com/tu-repo/proyecto.git
-cd proyecto
-Actualizar Configuración:
 
-Reemplace la configuración de Firebase en el script con las credenciales de su proyecto:
+------------
 
+Abre el archivo script.js y reemplaza la configuración de Firebase con la tuya:
 javascript
-Copiar código
-const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_AUTH_DOMAIN",
-    projectId: "TU_PROJECT_ID",
-    storageBucket: "TU_STORAGE_BUCKET",
-    messagingSenderId: "TU_MESSAGING_SENDER_ID",
-    appId: "TU_APP_ID"
+
+
+    const firebaseConfig = {
+        apiKey: "TU_API_KEY",
+        authDomain: "TU_AUTH_DOMAIN",
+        projectId: "TU_PROJECT_ID",
+        storageBucket: "TU_STORAGE_BUCKET",
+        messagingSenderId: "TU_MESSAGING_SENDER_ID",
+        appId: "TU_APP_ID"
+    };
+
+------------
+
+
+#### Estructura del Proyecto
+
+```
+├── index.html
+├── style.css
+├── script.js
+└── assets
+    └── NYT-Bestseller-logo-818x200.png
+```
+##### index.html
+El archivo index.html contiene la estructura principal del sitio web. Incluye enlaces a los archivos CSS y JS, así como elementos HTML necesarios para la interfaz de usuario.
+
+##### style.css
+El archivo style.css define los estilos para la aplicación, incluyendo la apariencia del spinner, botones, formularios y demás elementos visuales.
+
+##### script.js
+El archivo script.js contiene toda la lógica de la aplicación. Incluye la configuración de Firebase, las funciones para autenticación, manipulación de Firestore, y el manejo de la interfaz de usuario.
+
+#### Funcionalidades Principales
+#### 1. Mostrar Listas de BestSeller
+La aplicación obtiene y muestra las listas de BestSeller del New York Times.
+
+```
+const llamadaListas = async () => {
+    try {
+        const respuesta = await fetch('https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=TU_API_KEY')
+        if (respuesta.ok) {
+            const data = await respuesta.json()
+            listasGlobal = data.results;
+            paintFirstPage(listasGlobal)
+            return listasGlobal
+        } else {
+            throw (error)
+        }
+    } catch (error) {
+        throw (error)
+    }
+}
+```
+#### 2. Filtrar y Ordenar Listas
+Los usuarios pueden filtrar y ordenar las listas de libros.
+
+```javascript
+filterButton.addEventListener('click', () => {
+    const filterValue = filterInput.value.toLowerCase();
+    filteredListas = listasGlobal.filter(lista =>
+        lista.list_name.toLowerCase().includes(filterValue)
+    );
+    paintFirstPage(filteredListas);
+});
+
+ordenListas.addEventListener('change', () => {
+    const selectOrden = ordenListas.value
+    orderLists(selectOrden)
+});
+```
+#### 3. Registro e Inicio de Sesión
+Los usuarios pueden registrarse e iniciar sesión utilizando Firebase Authentication.
+
+```javascript
+const signUpUser = (email, pass) => {
+    firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, pass)
+        .then((userCredential) => {
+            let user = userCredential.user;
+            console.log(`se ha registrado ${user.email} ID:${user.uid}`);
+            alert(`se ha registrado ${user.email} ID:${user.uid}`);
+            contenedorFormulario.innerHTML = '';
+            createUser({
+                id: user.uid,
+                email: user.email,
+                message: "hola!",
+            });
+        })
+        .catch((error) => {
+            console.log("Error en el sistema" + error.message, "Error: " + error.code);
+        });
 };
-Reemplace la clave API del NYT en las funciones llamadaListas y llamadaBestSellers:
+```
+#### 4. Añadir Libros a Favoritos
+Los usuarios pueden añadir libros a su lista de favoritos.
 
-javascript
-Copiar código
-const respuesta = await fetch('https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=TU_NYT_API_KEY');
-Ejecutar la Aplicación
-Abra el archivo index.html en su navegador web.
+```javascript
+const toggleFavoriteBook = async (book, userId, buttonFavorito, books) => {
+    const userRef = db.collection('users').doc(userId);
+    const favoritesRef = userRef.collection('favorites');
+    const query = favoritesRef.where('title', '==', book.title);
 
-Estructura de Archivos
-index.html: El archivo HTML principal que contiene la estructura de la aplicación web.
-style.css: El archivo CSS para el estilo de la aplicación.
-app.js: El archivo JavaScript que contiene toda la lógica para interactuar con la API del NYT, Firebase y manejar eventos de la interfaz de usuario.
-Principales Funciones de JavaScript
-Inicialización:
+    try {
+        const snapshot = await query.get();
+        if (snapshot.empty) {
+            const foundBook = books.find(element => element.title === book.title);
+            if (foundBook) {
+                createBooks(foundBook, userId, buttonFavorito);
+            } else {
+                console.error("Libro no encontrado en lista:", book.title);
+                alert("Libro no encontrado.");
+            }
+        } else {
+            snapshot.forEach(doc => {
+                doc.ref.delete();
+                console.log(`${book.title} deleted from favorites`);
+                alert(`${book.title} deleted from favorites`);
+                buttonFavorito.classList.remove('btn-favorito-active')
+                buttonFavorito.classList.add('btn-favorito')
+            });
+        }
+    } catch (error) {
+        console.error("Error en la busqueda del libro: ", error);
+    }
+};
+```
 
-document.addEventListener('DOMContentLoaded', ...) - Inicializa la aplicación y configura los listeners de eventos una vez que el DOM está completamente cargado.
-Configuración de Firebase:
+------------
 
-Inicializa Firebase con la configuración proporcionada y configura Firestore.
-Listeners de Eventos:
+Abre el archivo index.html en un navegador web.
+###### Registrarse o Iniciar Sesión
 
-Maneja interacciones del usuario como iniciar sesión, registrarse, filtrar listas y libros, y marcar libros como favoritos.
-Llamadas a la API:
+Haz clic en "Register" para crear una nueva cuenta.
+Haz clic en "Login" para iniciar sesión con una cuenta existente.
 
-llamadaListas() - Obtiene listas de libros de la API del NYT.
-llamadaBestSellers(category) - Obtiene libros en una categoría específica de la API del NYT.
-Funciones de Renderizado:
+###### Explorar Listas de Libros
 
-paintFirstPage(listasGlobal) - Renderiza las listas de libros en la página principal.
-paintSecondPage(books) - Renderiza los libros de una lista seleccionada.
-Ordenar y Filtrar:
+Usa el filtro y las opciones de ordenación para encontrar listas específicas.
+Haz clic en "Read More!" para ver los libros de una categoría.
 
-orderLists() - Ordena las listas de libros según los criterios seleccionados.
-orderBook() - Ordena los libros según los criterios seleccionados.
-Autenticación de Usuarios:
+###### Añadir a Favoritos
 
-signUpUser(email, pass) - Registra un nuevo usuario.
-signInUser(email, password) - Inicia sesión un usuario existente.
-signOut() - Cierra sesión del usuario actual.
-Gestión de Favoritos:
+Haz clic en el botón de favoritos para añadir un libro a tu lista de favoritos.
 
-toggleFavoriteBook(book, userId, buttonFavorito, books) - Alterna el estado de favorito de un libro.
-createBooks(foundBook, userId, buttonFavorito) - Agrega un libro a los favoritos del usuario.
-readAllFavoriteBooks(userId) - Lee y muestra todos los libros favoritos de un usuario.
-Carga de Imágenes de Perfil:
+###### Subir Imagen de Perfil
+Haz clic en "Subir Imagen" para subir una imagen de perfil.
 
-uploadFile() - Maneja la carga de imágenes de perfil a Firebase Storage.
-displayImage(url) - Muestra la imagen de perfil cargada.
-Despliegue
-Para desplegar esta aplicación, puede alojarla en cualquier servicio de alojamiento de sitios estáticos como GitHub Pages, Netlify o Firebase Hosting. Asegúrese de tener la configuración correcta y las claves API configuradas en su entorno.
+------------
 
-Licencia
-Este proyecto está licenciado bajo la Licencia MIT.
 
-Agradecimientos
-New York Times por su API de Best Sellers.
-Firebase por su completo conjunto de herramientas para aplicaciones web.
+Créditos
+Este proyecto fue desarrollado utilizando la API de The New York Times y Firebase. El diseño y la implementación fueron realizados por Luis Carlos Acosta.
+
+
+Este README proporciona una visión completa del proyecto, incluyendo la configuración, funcionalidades y uso de la aplicación. Asegúrate de personalizarlo según sea necesario para tu proyecto específico.
