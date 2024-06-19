@@ -202,7 +202,7 @@ const llamadaBestSellers = async (category) => {
             paintSecondPage(listBooks, nombreListas)
             return { listBooks, nombreListas }
         } else {
-            throw console.log(error)
+            throw (error)
         }
     } catch (error) {
         throw (error)
@@ -281,8 +281,8 @@ const toggleFavoriteBook = async (book, userId, buttonFavorito, books) => {
             if (foundBook) {
                 createBooks(foundBook, userId, buttonFavorito);
             } else {
-                console.error("Book not found in listBooks:", book.title);
-                alert("Book not found.");
+                console.error("Libro no encontrado en lista:", book.title);
+                alert("Libro no encontrado.");
             }
         } else {
             snapshot.forEach(doc => {
@@ -294,8 +294,7 @@ const toggleFavoriteBook = async (book, userId, buttonFavorito, books) => {
             });
         }
     } catch (error) {
-        console.error("Error toggling favorite book: ", error);
-        alert("Failed to toggle favorite status for the book.");
+        console.error("Error en la busqueda del libro: ", error);
     }
 };
 const createBooks = (foundBook, userId, buttonFavorito) => {
@@ -318,7 +317,7 @@ const createBooks = (foundBook, userId, buttonFavorito) => {
         })
         .catch(error => {
             console.error("Error adding favorite book: ", error);
-            alert("Failed to add book to favorites.");
+
         });
 };
 
@@ -465,4 +464,5 @@ firebase.auth().onAuthStateChanged((user)=> {
 
 llamadaListas();
 })
+//implementar git y añadir a libros favoritos en una sola
 
